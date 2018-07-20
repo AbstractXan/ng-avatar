@@ -1,0 +1,29 @@
+<button class="avatar" id="avatar-disp">
+  
+  <ng-template [ngIf]="image" style="
+    width: 100%;
+    height: 100%">
+          <img [src]="image" [alt]="name" >
+    
+  </ng-template>
+  <ng-template [ngIf]="name && !image">
+      <span>{{ name | slice:0:2 }}</span>
+  </ng-template>
+
+</button>
+
+<!--     this.name = '';
+    this.characters = 2;
+    this.image = '';
+    this.randomColor = false;
+    this.bgColor = this.randomColor ? palette[Math.floor(Math.random() * palette.length)] : defaultColor;
+    this.textColor = '#fff';
+    this.size = Size['md'];
+    this.fontSize = this.size * 0.4;
+    this.rounded = true;
+    this.radius = 0;
+    this.margin = 0;
+    this.label = '';
+    this.labelBgColor = defaultLabelColor;
+    this.labelTextColor = '#fff';
+    this.active = true; -->
