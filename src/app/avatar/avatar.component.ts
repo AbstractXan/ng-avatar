@@ -1,51 +1,310 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnInit } from '@angular/core';
-// import * as SVG from 'svg.js';
-import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size } from '../avatar.class';
-@Component({
-  selector: 'app-avatar',
-  templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class AvatarComponent implements OnInit {
+import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnChanges } from '@angular/core';
+import * as SVG from 'svg.js';
+import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette , defaultColor } from './avatar.class';
 
-  avatar: any;
-  @Input()name: string;
-  @Input()characters: number;
-  @Input()image: string;
-  @Input()bgColor: string;
-  @Input()textColor: string;
-  @Input()size: number | string;
-  @Input()fontSize: number | string;
-  @Input()rounded: boolean;
-  @Input()radius: number;
-  @Input()margin: number | string;
-  @Input()randomColor: boolean;
-  @Input()label: string;
-  @Input()labelBgColor: string;
-  @Input()labelTextColor: string;
-  @Input()active: boolean;
+class Avatar {
 
-  constructor(){
+  // HTML Element
+  el: HTMLElement | string;
+  // Avatar Options 
+  options: IAvatarOptions;
+
+  //Set values of element, options,
+  constructor(private _el: HTMLElement | string, private arg1: IAvatarOptions | string, private arg2?: IAvatarOptions) {
+    if (!this.arg1) {
+      return;
+    }
+    this.el = Avatar.getElement(_el);
+    this.options = Avatar.getOptions(arg1, arg2);
+    this.render();
   }
-  ngOnInit(){
-    this.avatar = new Avatar;
 
-    if(this.name != null){
-      this.avatar.options.name=this.name;
+  static isDark(color: string) {
+    let r: any;
+    let b: any;
+    let g: any;
+    let hsp: any;
+    let a: any = color;
+
+    if (a.match(/^rgb/)) {
+      a = a.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/);
+      r = a[1];
+      g = a[2];
+      b = a[3];
+    } else {
+      a = +('0x' + a.slice(1).replace(
+          a.length < 5 && /./g, '$&$&'
+        )
+      );
+      r = a >> 16;        // tslint:disable-line
+      b = a >> 8 & 255;   // tslint:disable-line
+      g = a & 255;        // tslint:disable-line
+    }
+    hsp = Math.sqrt(
+      0.299 * (r * r) +
+      0.587 * (g * g) +
+      0.114 * (b * b)
+    );
+    return (hsp < 200);
+  }
+
+  static getElement(_el: HTMLElement | string): HTMLElement {
+    if (!_el) {
+      throw new Error('Element not provided');
+    }
+    switch (typeof _el) {
+      case 'string':
+        const el = document.getElementById((_el as string));
+        if (el) {
+          return (el as HTMLElement);
+        } else {
+          throw new Error('Element is not present');
+        }
+      default:
+        return (_el as HTMLElement);
+    }
+  }
+
+  static expandProperty(value?: string | number): ICssProperty {
+    const returnObj: ICssProperty = {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    };
+    if (value) {
+      switch (typeof value) {
+        case 'number':
+          returnObj.top = returnObj.bottom = returnObj.left = returnObj.right = (value as number);
+          break;
+        case 'string':
+          const properties = (value as string).split(' ').map((m: string) => +m.replace(/\D/g, ''));
+          switch (properties.length) {
+            case 1:
+              returnObj.top = returnObj.bottom = returnObj.left = returnObj.right = properties[0];
+              break;
+            case 2:
+              returnObj.left = returnObj.right = properties[1];
+              break;
+            case 3:
+              returnObj.left = returnObj.right = properties[1];
+              returnObj.bottom = properties[2];
+              break;
+            case 4:
+              returnObj.right = properties[1];
+              returnObj.bottom = properties[2];
+              returnObj.left = properties[3];
+              break;
+          }
+          break;
+      }
+    }
+    return returnObj;
+  }
+
+  static getOptions(arg1: IAvatarOptions | string, arg2?: IAvatarOptions): IAvatarOptions {
+    const _default: IAvatarOptions = new DefaultAvatarOptions();
+    let _options: IAvatarOptions = { ..._default };
+    switch (typeof arg1) {
+      case 'string':
+        _options.name = (arg1 as string);
+        break;
+      case 'object':
+        if (!(arg1 as IAvatarOptions).name) {
+          throw new Error('Name is required');
+        }
+        _options = { ..._options, ...(arg1 as IAvatarOptions) };
+        break;
+    }
+    if (arg2 && typeof arg2 === 'object') {
+      _options = { ..._options, ...(arg2 as IAvatarOptions) };
+    }
+    for (const key in _options) {
+      if (typeof _options[key] === 'undefined') {
+        _options[key] = _default[key];
+      }
+    }
+    if (typeof _options.size === 'string') {
+      _options.size = Size[(_options.size as any)];
+      if (!_options.size) {
+        _options.size = Size['md'];
+      }
+    }
+    
+    _options.fontSize = (_options.size as number) * 0.4;
+
+    if (!Avatar.isDark((_options.bgColor as any))) {
+      _options.textColor = '#000';
+    }
+    if (_options.label && !Avatar.isDark((_options.labelBgColor as any))) {
+      _options.labelTextColor = '#000';
+    }
+    return { ..._options };
+  }
+
+  update(prop: string, value: string | number) {
+    this.options = <IAvatarOptions>{
+      ...this.options,
+      [prop]: value
+    };
+    this.render();
+  }
+
+  render() {
+    (this.el as HTMLElement).innerHTML = '';
+    const svgElement = SVG((this.el as HTMLElement));
+    const { top, right, bottom, left } = Avatar.expandProperty(this.options.margin);
+    const size: number = (this.options.size as number);
+    svgElement.size(size + left + right, size + top + bottom);
+
+    let shape: any;
+
+    //Rounded
+    //Boxed
+    //Rounded Box (if radius is provided)
+    if (this.options.rounded) {
+      shape = svgElement
+        .circle(size);
+    } else {
+      shape = svgElement
+        .rect(size, size)
+        .radius((this.options.radius as number));
+    }
+
+    //Bg-Color
+    //Active
+    shape
+      .fill(this.getBgColor())
+      .attr('fill-opacity', this.options.active ? 1 : 0.5)
+      .move(left, top);
+
+   
+      //image
+    if (this.options.image) {
+      const that = this;
+      svgElement.image(this.options.image).loaded(function(this: SVG.Image) {
+        let c: any;
+        if (that.options.rounded) {
+          c = svgElement.circle(size - 4);
+        } else {
+          c = svgElement.rect(size - 4, size - 4).radius((that.options.radius as number));
+        }
+        c.move(left + 2, top + 2);
+        this.size((that.options.size as number))
+          .center((size / 2) + left, (size / 2) + top).clipWith(c);
+      });
+    }
+
+     //text
+     svgElement
+     .text(this.getSlug())
+     .attr('fill-opacity', this.options.active ? 1 : 0.8)
+     .fill(this.options.textColor)
+     .font({
+      size: this.options.fontSize,
+     })
+     .center((size / 2) + left, (size / 2) + top);
+
+    //label
+    if (this.options.label) {
+      svgElement
+        .rect(size, size * 0.25)
+        .radius(2)
+        .fill(this.options.labelBgColor)
+        .attr('fill-opacity', this.options.active ? 1 : 0.8)
+        .move(left, top + size - (size * 0.25));
+
+      svgElement
+        .text(this.options.label)
+        .fill(this.options.labelTextColor)
+        .font({
+          size: size * 0.25
+        })
+        .center((size / 2) + left, top + size - ((size * 0.25) / 2));
     }
 
   }
-}
-  
 
-  
+  private getSlug() {
+    //Return nothing if DNE
+    if(!this.options.name){
+      return '';
+    }
+    var initials;
+    if (this.options.name && this.options.name.length) {
+      const nameInitials = this.options.name.match(/\b(\w)/g);
+      if (nameInitials) {
+        
+        const nameChars = nameInitials.slice(0, 3).join('');
+        initials = nameChars.toUpperCase();
 
-class Avatar{
-  options: IAvatarOptions
-  constructor(){
-    this.options = new DefaultAvatarOptions;
+      } else {
+        initials = this.options.name[0];
+      }
+
+      //Return the set no. of characters
+      return initials.slice(0,this.options.characters)
+    }
+  }
+
+  private getBgColor(){
+    if(this.options.randomColor){
+     return palette[Math.floor(Math.random() * palette.length)];
+    }
+    else{
+      return this.options.bgColor;
+    }
   }
 }
 
 
+@Component({
+  selector: 'app-avatar',
+  templateUrl: './avatar.component.html',
+  styleUrls: ['./avatar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class AvatarComponent implements OnChanges {
+
+  @HostBinding('class') class = 'd-flex';
+
+  @Input() options: IAvatarOptions = {};
+  avatar: Avatar;
+
+  @Input() name:string;
+  @Input() characters:number;
+  @Input() image:string;
+  @Input() bgColor:string;
+  @Input() textColor:string;
+  @Input() size:number|string;
+  @Input() fontSize:number|string;
+  @Input() rounded:boolean;
+  @Input() radius:number;
+  @Input() margin:number|string;
+  @Input() randomColor:boolean;
+  @Input() label :string;
+  @Input() labelBgColor:string;
+  @Input() labelTextColor:string;
+  @Input() active:boolean;
+  constructor(private el: ElementRef) {
+  }
+
+  ngOnChanges() {
+    this.options.name = this.name;
+    this.options.image = this.image;
+    this.options.characters= this.characters;
+    this.options.bgColor = this.bgColor;
+    this.options.textColor = this.textColor;
+    this.options.size = this.size;
+    this.options.fontSize = this.fontSize;
+    this.options.rounded = this.rounded;
+    this.options.radius = this.radius;
+    this.options.margin = this.margin;
+    this.options.randomColor = this.randomColor;
+    this.options.label = this.label;
+    this.options.labelBgColor = this.labelBgColor;
+    this.options.labelTextColor = this.labelTextColor;
+    this.options.active = this.active;
+    this.avatar = new Avatar(this.el.nativeElement, this.image || this.name || this.options.name, this.options);
+  }
+}

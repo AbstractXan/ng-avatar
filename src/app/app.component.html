@@ -1,9 +1,70 @@
-<div>
+<div align="center">
   <h2>Using avatar module</h2>
-  Variables: 
-    <ol>
-      <li> name: "SAMPLE"</li>
-    </ol>
   <br>
-  <app-avatar [name]="name"></app-avatar>
+  <app-avatar 
+  [name]="name"
+  [image]="image"
+  [characters]="characters"
+  [bgColor]="bgColor"
+  [textColor]="textColor"
+  [size]="size"
+  [fontSize]="fontSize"
+  [rounded]="rounded"
+  [radius]="radius"
+  [margin]="margin"
+  [randomColor]="randomColor"
+  [label]="label"
+  [labelBgColor]="labelBgColor"
+  [labelTextColor]="labelTextColor"
+  [active]="active"
+
+  ></app-avatar>
+  <br>
+
+  Name:
+  <input [(ngModel)]="name" type="text"/><br>
+    
+  Image:
+  <input [(ngModel)]="image" type="text"/><br>
+
+  Charachters:
+  <input [(ngModel)]="characters" type="text"/><br>
+
+  bgColor
+  <input [(ngModel)]="bgColor" type="text"/><br>
+
+  textColor
+  <input [(ngModel)]="textColor" type="text"/><br>
+
+  size
+  <input [(ngModel)]="size" type="text"/><br>
+
+  fontSize
+  <input [(ngModel)]="fontSize" type="text"/>{{fontSize}}<br> 
+
+  rounded
+  <button (click)="toggleRounded()">ToggleRounded</button> {{rounded}}<br>
+  
+  radius
+  <input [(ngModel)]="radius" type="text"/><br>
+
+  margin
+  <input [(ngModel)]="margin" type="text"/><br>
+
+  randomColor
+  <button (click)="toggleRandomColor()">ToggleRandColor</button> {{randomColor}} <br>
+  
+  label
+  <input [(ngModel)]="label" type="text"/><br>
+  
+  labelBgColor
+  <input [(ngModel)]="labelBgColor" type="text"/><br>
+  
+  labelTextColor
+  <input [(ngModel)]="labelTextColor" type="text"/><br>
+
+  active
+  <button (click)="toggleActive()">ToggleActive</button> {{active}}<br>
+
+  {{name}}
 </div>
