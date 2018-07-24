@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnChanges } from '@angular/core';
 import * as SVG from 'svg.js';
-import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette , defaultColor } from './avatar.class';
+import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette} from './avatar.class';
 
 class Avatar {
 
