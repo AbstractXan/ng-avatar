@@ -17,6 +17,7 @@
   [labelBgColor]="labelBgColor"
   [labelTextColor]="labelTextColor"
   [active]="active"
+  [uploadable]="uploadable"
 
   ></app-avatar>
   <br>
@@ -65,6 +66,9 @@
 
   active
   <button (click)="toggleActive()">ToggleActive</button> {{active}}<br>
+
+  uploadable
+  <button (click)="toggleUploadable()">toggleUploadable</button> {{uploadable}}<br>
 
   {{name}}
 </div>

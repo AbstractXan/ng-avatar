@@ -22,6 +22,7 @@ export class AppComponent implements OnInit{
   labelBgColor: string;
   labelTextColor: string;
   active: boolean;
+  uploadable: boolean;
 
   constructor(){
     
@@ -55,6 +56,15 @@ export class AppComponent implements OnInit{
     }
     else{
       this.active=true;
+    }
+  }
+
+  toggleUploadable(){
+    if(this.uploadable==true){
+      this.uploadable=false
+    }
+    else{
+      this.uploadable=true;
     }
   }
 }

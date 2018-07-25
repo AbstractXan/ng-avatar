@@ -157,18 +157,26 @@ class Avatar {
     const size: number = (this.options.size as number);
     svgElement.size(size + left + right, size + top + bottom);
 
+    
     let shape: any;
+    let uploadShape : any;
+    let uploadIcon: any;
+    let image: any;
+    let text: any;
+    let label: any;
+    let labelText: any;
 
     //Rounded
     //Boxed
     //Rounded Box (if radius is provided)
-    if (this.options.rounded) {
+    if (this.options.rounded==true) {
       shape = svgElement
         .circle(size);
     } else {
       shape = svgElement
         .rect(size, size)
         .radius((this.options.radius as number));
+     
     }
 
     //Bg-Color
@@ -177,12 +185,12 @@ class Avatar {
       .fill(this.getBgColor())
       .attr('fill-opacity', this.options.active ? 1 : 0.5)
       .move(left, top);
-
    
+      
       //image
     if (this.options.image) {
       const that = this;
-      svgElement.image(this.options.image).loaded(function(this: SVG.Image) {
+      image = svgElement.image(this.options.image).loaded(function(this: SVG.Image) {
         let c: any;
         if (that.options.rounded) {
           c = svgElement.circle(size - 4);
@@ -196,7 +204,7 @@ class Avatar {
     }
 
      //text
-     svgElement
+     text = svgElement
      .text(this.getSlug())
      .attr('fill-opacity', this.options.active ? 1 : 0.8)
      .fill(this.options.textColor)
@@ -207,14 +215,14 @@ class Avatar {
 
     //label
     if (this.options.label) {
-      svgElement
+      label = svgElement
         .rect(size, size * 0.25)
         .radius(2)
         .fill(this.options.labelBgColor)
         .attr('fill-opacity', this.options.active ? 1 : 0.8)
         .move(left, top + size - (size * 0.25));
 
-      svgElement
+      labelText = svgElement
         .text(this.options.label)
         .fill(this.options.labelTextColor)
         .font({
@@ -223,7 +231,72 @@ class Avatar {
         .center((size / 2) + left, top + size - ((size * 0.25) / 2));
     }
 
+    //upload
+    if(this.options.uploadable==true){
+      
+      if (this.options.rounded==true) {
+        uploadShape = svgElement
+          .circle(size); 
+      } else {
+        uploadShape = svgElement
+          .rect(size, size)
+          .radius((this.options.radius as number));
+      }
+
+      uploadShape
+        .fill("grey")
+        .attr('fill-opacity', 0)
+        .move(left, top);
+
+      //UploadIcon
+      const that = this;
+      uploadIcon = svgElement.image("../assets/images/camera.png").loaded(function(this: SVG.Image) {
+          let c: any;
+          if (that.options.rounded) {
+            c = svgElement.circle(size - 4);
+          } else {
+            c = svgElement.rect(size - 4, size - 4).radius((that.options.radius as number));
+          }
+          c.move(left + 2, top + 2);
+          this.size((that.options.size as number)*0.5)
+            .center((size / 2) + left, (size / 2) + top).clipWith(c)
+            .attr('opacity',0);
+        });
+      
+      svgElement.mouseover(function(){
+        shape.attr('fill-opacity', 0.25);
+        uploadShape
+          .attr('fill-opacity', 0.75);
+        
+        uploadIcon
+          .attr('opacity', 1);
+
+        image.attr('opacity', 0.25);
+        text.attr('fill-opacity', 0.25);
+
+        if(label!=null){
+        label
+          .attr('fill-opacity', 0);
+        labelText.attr('fill-opacity', 0.25);
+        }
+      })
+
+      svgElement.mouseout(function(){
+        shape.attr('fill-opacity', 1);
+        uploadShape.attr('fill-opacity', 0);
+        uploadIcon.attr('opacity', 0);
+        image.attr('opacity', 1);
+        text.attr('fill-opacity', 1);
+
+        if(label!=null){
+          label
+            .attr('fill-opacity', 1);
+          labelText.attr('fill-opacity', 1);
+          }
+      })
+    }
   }
+
 
   private getSlug() {
     //Return nothing if DNE
@@ -286,6 +359,7 @@ export class AvatarComponent implements OnChanges {
   @Input() labelBgColor:string;
   @Input() labelTextColor:string;
   @Input() active:boolean;
+  @Input() uploadable:boolean;
   constructor(private el: ElementRef) {
   }
 
@@ -305,6 +379,7 @@ export class AvatarComponent implements OnChanges {
     this.options.labelBgColor = this.labelBgColor;
     this.options.labelTextColor = this.labelTextColor;
     this.options.active = this.active;
+    this.options.uploadable = this.uploadable;
     this.avatar = new Avatar(this.el.nativeElement, this.image || this.name || this.options.name, this.options);
   }
 }

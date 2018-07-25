@@ -51,6 +51,7 @@ export interface IAvatarOptions {
   labelBgColor?: string;
   labelTextColor?: string;
   active?: boolean;
+  uploadable?: boolean;
 }
 
 export interface ICssProperty {
@@ -76,6 +77,7 @@ export class DefaultAvatarOptions implements IAvatarOptions {
   labelBgColor: string;
   labelTextColor: string;
   active: boolean;
+  uploadable: boolean;
 
   constructor() {
     this.name = '';
@@ -93,5 +95,6 @@ export class DefaultAvatarOptions implements IAvatarOptions {
     this.labelBgColor = defaultLabelColor;
     this.labelTextColor = '#fff';
     this.active = true;
+    this.uploadable = false;
   }
 }
