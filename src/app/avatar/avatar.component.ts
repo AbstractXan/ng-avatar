@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnChanges, HostListener, EventEmitter, Output } from '@angular/core';
 import * as SVG from 'svg.js';
 import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette} from './avatar.class';
 
@@ -187,7 +187,7 @@ class Avatar {
       .move(left, top);
    
       
-      //image
+    //image
     if (this.options.image) {
       const that = this;
       image = svgElement.image(this.options.image).loaded(function(this: SVG.Image) {
@@ -328,22 +328,21 @@ class Avatar {
       return this.options.bgColor;
     }
   }
+
+  
 }
 
 
 @Component({
   selector: 'app-avatar',
   templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.scss'],
+  styleUrls: ['./avatar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AvatarComponent implements OnChanges {
 
-  @HostBinding('class') class = 'd-flex';
-
-  @Input() options: IAvatarOptions = {};
   avatar: Avatar;
-
+  @Input() options: IAvatarOptions = {};
   @Input() name:string;
   @Input() characters:number;
   @Input() image:string;
@@ -360,6 +359,17 @@ export class AvatarComponent implements OnChanges {
   @Input() labelTextColor:string;
   @Input() active:boolean;
   @Input() uploadable:boolean;
+
+  @Output() upload: 
+    EventEmitter<any> = new EventEmitter<any>();
+
+  @HostListener('click') function (){
+    if (this.uploadable==true){
+      this.upload.emit();
+    }
+  }  
+
+
   constructor(private el: ElementRef) {
   }
 
@@ -381,5 +391,9 @@ export class AvatarComponent implements OnChanges {
     this.options.active = this.active;
     this.options.uploadable = this.uploadable;
     this.avatar = new Avatar(this.el.nativeElement, this.image || this.name || this.options.name, this.options);
+    
+    
   }
+
+  
 }

@@ -67,6 +67,10 @@ export class AppComponent implements OnInit{
       this.uploadable=true;
     }
   }
+
+  uploadCalled(temp: any){
+    console.log('UPload Called.')
+  }
 }
 
 
