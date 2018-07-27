@@ -11,7 +11,7 @@ import { AvatarModule } from './avatar/avatar.module';
   imports: [
     BrowserModule,
     FormsModule,
-    AvatarModule.forRoot()
+    AvatarModule.forRoot({name: "Priyansh Sangule", label: "Admin",})
   ],
   providers: [],
   bootstrap: [AppComponent]

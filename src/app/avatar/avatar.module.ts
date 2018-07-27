@@ -1,6 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from './avatar.component';
+import { AvatarService, CONFIG } from './service/avatar.service';
+import { DefaultAvatarOptions, IAvatarOptions } from './avatar.class';
 
 @NgModule({
   imports: [
@@ -14,9 +16,14 @@ import { AvatarComponent } from './avatar.component';
   ],
 })
 export class AvatarModule {
-  static forRoot(): ModuleWithProviders{
+  static forRoot(config?: IAvatarOptions): ModuleWithProviders{
     return {
-      ngModule: AvatarModule
+      ngModule: AvatarModule,
+      providers: [
+        {
+          provide: CONFIG, useValue: config,
+        },
+      ]
     }
   }
  }

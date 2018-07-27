@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnChanges, HostListener, EventEmitter, Output } from '@angular/core';
 import * as SVG from 'svg.js';
 import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette} from './avatar.class';
+import { AvatarService } from './service/avatar.service';
 
 class Avatar {
 
@@ -336,8 +337,10 @@ class Avatar {
 @Component({
   selector: 'app-avatar',
   templateUrl: './avatar.component.html',
+  providers: [AvatarService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class AvatarComponent implements OnChanges {
 
   avatar: Avatar;
@@ -367,31 +370,31 @@ export class AvatarComponent implements OnChanges {
       this.upload.emit();
     }
   } 
-  }
+  
 
 
-  constructor(private el: ElementRef) {
+  constructor(private el: ElementRef, private avatarService: AvatarService) {
   }
 
   ngOnChanges() {
-    this.options.name = this.name;
-    this.options.image = this.image;
-    this.options.characters= this.characters;
-    this.options.bgColor = this.bgColor;
-    this.options.textColor = this.textColor;
-    this.options.size = this.size;
-    this.options.fontSize = this.fontSize;
-    this.options.rounded = this.rounded;
-    this.options.radius = this.radius;
-    this.options.margin = this.margin;
-    this.options.randomColor = this.randomColor;
-    this.options.label = this.label;
-    this.options.labelBgColor = this.labelBgColor;
-    this.options.labelTextColor = this.labelTextColor;
-    this.options.active = this.active;
-    this.options.uploadable = this.uploadable;
+    this.options = this.avatarService.getAvatarConfig();
+    this.options.name = (this.name)?this.name:this.options.name;
+    this.options.image = (this.image)?this.image:this.options.image;
+    this.options.characters=(this.characters)?this.characters: this.options.characters; 
+    this.options.textColor =(this.textColor)?this.textColor:this.options.textColor; 
+    this.options.size =(this.size)?this.size: this.options.size;
+    this.options.fontSize =(this.fontSize)?this.fontSize:this.options.fontSize; 
+    this.options.rounded =(this.rounded)?this.rounded:this.options.rounded ; 
+    this.options.radius =( this.radius)? this.radius:this.options.radius;
+    this.options.margin =( this.margin)? this.margin: this.options.margin;
+    this.options.randomColor =(this.randomColor)?this.randomColor: this.options.randomColor; 
+    this.options.label =(this.label)?this.label:this.options.label ;
+    this.options.labelBgColor =(this.labelBgColor)?this.labelBgColor:this.options.labelBgColor ; 
+    this.options.labelTextColor =(this.labelTextColor)?this.labelTextColor: this.options.labelTextColor; 
+    this.options.active =( this.active)? this.active:this.options.active;
+    this.options.uploadable =( this.uploadable)? this.uploadable:this.options.uploadable;
+
     this.avatar = new Avatar(this.el.nativeElement, this.image || this.name || this.options.name, this.options);
-    
     
   }
 
