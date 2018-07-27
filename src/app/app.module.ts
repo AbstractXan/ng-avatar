@@ -2,16 +2,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import { AppComponent } from './app.component';
-import { AvatarComponent } from './avatar';
+import { AvatarModule } from './avatar/avatar.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AvatarComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    AvatarModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

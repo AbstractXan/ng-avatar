@@ -336,7 +336,6 @@ class Avatar {
 @Component({
   selector: 'app-avatar',
   templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AvatarComponent implements OnChanges {
@@ -363,11 +362,12 @@ export class AvatarComponent implements OnChanges {
   @Output() upload: 
     EventEmitter<any> = new EventEmitter<any>();
 
-  @HostListener('click') function (){
+  @HostListener('click') EmitUpload (){
     if (this.uploadable==true){
       this.upload.emit();
     }
-  }  
+  } 
+  }
 
 
   constructor(private el: ElementRef) {
