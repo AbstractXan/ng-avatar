@@ -1,4 +1,4 @@
-import { Component,OnInit} from '@angular/core';
+import { Component,OnInit, ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +24,7 @@ export class AppComponent implements OnInit{
   active: boolean;
   uploadable: boolean;
 
+
   constructor(){
     
   }
@@ -33,12 +34,13 @@ export class AppComponent implements OnInit{
   }
   
   toggleRounded(){
-    if(this.rounded==true){
-      this.rounded=false
-    }
-    else{
-      this.rounded=true;
-    }
+    // if(this.rounded==true){
+    //   this.rounded=false
+    // }
+    // else{
+    //   this.rounded=true;
+    // }
+    this.rounded = !this.rounded;
   }
 
   toggleRandomColor(){
@@ -72,5 +74,3 @@ export class AppComponent implements OnInit{
     console.log('UPload Called.')
   }
 }
-
-

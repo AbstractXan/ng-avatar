@@ -211,7 +211,7 @@ class Avatar {
           c = svgElement.rect(size - 4, size - 4).radius((that.options.radius as number));
         }
         c.move(left + 2, top + 2);
-        this.size((that.options.size as number))
+        this.size(size)
           .center((size / 2) + left, (size / 2) + top).clipWith(c);
       });
     }
@@ -271,7 +271,7 @@ class Avatar {
             c = svgElement.rect(size - 4, size - 4).radius((that.options.radius as number));
           }
           c.move(left + 2, top + 2);
-          this.size((that.options.size as number)*0.5)
+          this.size(size*0.5)
             .center((size / 2) + left, (size / 2) + top).clipWith(c)
             .attr('opacity',0);
         });
