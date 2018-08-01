@@ -1,10 +1,20 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, OnChanges, HostListener, EventEmitter, Output } from '@angular/core';
+import { 
+  ChangeDetectionStrategy, 
+  Component, 
+  ElementRef, 
+  Input, 
+  OnChanges, 
+  HostListener, 
+  EventEmitter, 
+  Output,
+  DoCheck,
+  KeyValueDiffers
+} from '@angular/core';
 import * as SVG from 'svg.js';
 import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette} from './avatar.class';
 import { AvatarService } from './service/avatar.service';
 
 class Avatar {
-
   // HTML Element
   el: HTMLElement | string;
   // Avatar Options 
@@ -155,7 +165,9 @@ class Avatar {
     (this.el as HTMLElement).innerHTML = '';
     const svgElement = SVG((this.el as HTMLElement));
     const { top, right, bottom, left } = Avatar.expandProperty(this.options.margin);
-    const size: number = (this.options.size as number);
+    const size = this.getSize();
+    
+    this.options.fontSize = size * 0.4;
     svgElement.size(size + left + right, size + top + bottom);
 
     
@@ -271,29 +283,27 @@ class Avatar {
         
         uploadIcon
           .attr('opacity', 1);
-
-        image.attr('opacity', 0.25);
         text.attr('fill-opacity', 0.25);
 
         if(label!=null){
-        label
-          .attr('fill-opacity', 0);
+        label.attr('fill-opacity', 0);
         labelText.attr('fill-opacity', 0.25);
         }
+        
+        if(image!=null){image.attr('opacity', 0.25);}
       })
 
       svgElement.mouseout(function(){
         shape.attr('fill-opacity', 1);
         uploadShape.attr('fill-opacity', 0);
         uploadIcon.attr('opacity', 0);
-        image.attr('opacity', 1);
         text.attr('fill-opacity', 1);
-
         if(label!=null){
           label
             .attr('fill-opacity', 1);
           labelText.attr('fill-opacity', 1);
           }
+        if(image!=null){image.attr('opacity', 1);}
       })
     }
   }
@@ -330,6 +340,15 @@ class Avatar {
     }
   }
 
+  private getSize(){
+    if (!this.options.size) {
+      return Size['md'];
+    }else if(typeof this.options.size === 'number'){
+      return this.options.size; 
+    }else{
+      return Size[(this.options.size)];
+    }
+  }
   
 }
 
@@ -341,10 +360,10 @@ class Avatar {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class AvatarComponent implements OnChanges {
+export class AvatarComponent implements DoCheck {
 
   avatar: Avatar;
-  @Input() options: IAvatarOptions = {};
+  @Input() options: IAvatarOptions;
   @Input() name:string;
   @Input() characters:number;
   @Input() image:string;
@@ -365,21 +384,27 @@ export class AvatarComponent implements OnChanges {
   @Output() upload: 
     EventEmitter<any> = new EventEmitter<any>();
 
+  differ:any; 
   @HostListener('click') EmitUpload (){
     if (this.uploadable==true){
       this.upload.emit();
     }
   } 
   
-
-
-  constructor(private el: ElementRef, private avatarService: AvatarService) {
+  constructor(private el: ElementRef, private avatarService: AvatarService, private differs: KeyValueDiffers) {
+    
+    this.differ = this.differs.find({}).create();
+  
+    this.options = this.avatarService.getAvatarConfig();
+    this.avatar = new Avatar(this.el.nativeElement, this.image || this.name || this.options.name || this.options.image, this.options);
+    
   }
 
-  ngOnChanges() {
+  ngDoCheck() {
     this.options = this.avatarService.getAvatarConfig();
     this.options.name = (this.name)?this.name:this.options.name;
     this.options.image = (this.image)?this.image:this.options.image;
+    this.options.bgColor = (this.bgColor)?this.bgColor:this.options.bgColor;
     this.options.characters=(this.characters)?this.characters: this.options.characters; 
     this.options.textColor =(this.textColor)?this.textColor:this.options.textColor; 
     this.options.size =(this.size)?this.size: this.options.size;
@@ -391,11 +416,27 @@ export class AvatarComponent implements OnChanges {
     this.options.label =(this.label)?this.label:this.options.label ;
     this.options.labelBgColor =(this.labelBgColor)?this.labelBgColor:this.options.labelBgColor ; 
     this.options.labelTextColor =(this.labelTextColor)?this.labelTextColor: this.options.labelTextColor; 
-    this.options.active =( this.active)? this.active:this.options.active;
+    this.options.active =(this.active)? this.active:this.options.active;
     this.options.uploadable =( this.uploadable)? this.uploadable:this.options.uploadable;
 
-    this.avatar = new Avatar(this.el.nativeElement, this.image || this.name || this.options.name, this.options);
+    var changes = this.differ.diff(this.options);
+
+    console.log(this.options);
+    if(changes){
+      console.log('change detected');
+      changes.forEachChangedItem(r => console.log('changed', r.key ));
+      changes.forEachChangedItem(r => this.avatar.update(r.key,r.currentValue));
+
+      changes.forEachAddedItem(r => console.log('added ' , r.key , r.currentValue));
+      changes.forEachAddedItem(r => this.avatar.update(r.key,r.currentValue));
+
+      changes.forEachRemovedItem(r => console.log('removed ' , r.key));
+      changes.forEachRemovedItem(r => this.avatar.update(r.key,r.currentValue));
+      // this.avatar = new Avatar(this.el.nativeElement, this.image || this.name || this.options.name || this.options.image, this.options);
     
+    }else{
+      console.log('nothing changed');
+    }
   }
 
   
