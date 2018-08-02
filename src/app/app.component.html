@@ -21,6 +21,7 @@
 
   (upload)="uploadCalled($event)"
   ></app-avatar>
+
   <br>
 
   Name:
@@ -45,7 +46,7 @@
   <input [(ngModel)]="fontSize" type="text"/>{{fontSize}}<br>  -->
 
   rounded
-  <button (click)="toggleRounded()">ToggleRounded</button> {{rounded}}<br>
+  <button (click)="toggleRounded()" >ToggleRounded</button> {{rounded}}<br>
   
   radius
   <input [(ngModel)]="radius" type="text"/><br>
