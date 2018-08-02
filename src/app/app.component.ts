@@ -34,31 +34,19 @@ export class AppComponent implements OnInit{
   }
   
   toggleRounded(){
-    var newRounded = !this.rounded;
-    this.rounded= newRounded;
+    this.rounded = !this.rounded;
   }
 
   toggleRandomColor(){
-    var newRandomColor = !this.randomColor;
-    this.randomColor = newRandomColor;
+    this.randomColor = !this.randomColor;
   }
 
   toggleActive(){
-    if(this.active==true){
-      this.active=false
-    }
-    else{
-      this.active=true;
-    }
+  this.active = !this.active;
   }
 
   toggleUploadable(){
-    if(this.uploadable==true){
-      this.uploadable=false
-    }
-    else{
-      this.uploadable=true;
-    }
+   this.uploadable = !this.uploadable;
   }
 
   uploadCalled(temp: any){

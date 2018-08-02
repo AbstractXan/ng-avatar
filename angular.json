@@ -121,6 +121,46 @@
           }
         }
       }
+    },
+    "ng-avatar": {
+      "root": "projects/ng-avatar",
+      "sourceRoot": "projects/ng-avatar/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ng-avatar/tsconfig.lib.json",
+            "project": "projects/ng-avatar/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/ng-avatar/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-avatar/src/test.ts",
+            "tsConfig": "projects/ng-avatar/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-avatar/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-avatar/tsconfig.lib.json",
+              "projects/ng-avatar/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "avatar"

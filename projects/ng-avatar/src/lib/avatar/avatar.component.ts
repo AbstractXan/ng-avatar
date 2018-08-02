@@ -11,10 +11,11 @@ import {
   KeyValueDiffers
 } from '@angular/core';
 import * as SVG from 'svg.js';
-import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette} from './avatar.class';
-import { AvatarService } from './service/avatar.service';
 
-class Avatar {
+import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette} from '../avatar.class';
+import { AvatarService } from '../service/avatar.service';
+
+export class Avatar {
   // HTML Element
   el: HTMLElement | string;
   // Avatar Options 
