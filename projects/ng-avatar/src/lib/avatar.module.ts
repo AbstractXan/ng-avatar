@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { AvatarComponent } from './avatar/avatar.component';
 import { AvatarService, CONFIG } from './service/avatar.service';
 import { DefaultAvatarOptions, IAvatarOptions } from './avatar.class';
-
 @NgModule({
   imports: [
     CommonModule

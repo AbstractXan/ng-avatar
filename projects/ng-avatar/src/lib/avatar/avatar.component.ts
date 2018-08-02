@@ -10,7 +10,8 @@ import {
   DoCheck,
   KeyValueDiffers
 } from '@angular/core';
-import * as SVG from 'svg.js';
+import * as SVG_ from 'svg.js';
+const SVG = SVG_;
 
 import { DefaultAvatarOptions, IAvatarOptions, ICssProperty, Size, palette} from '../avatar.class';
 import { AvatarService } from '../service/avatar.service';
@@ -204,7 +205,7 @@ export class Avatar {
     //image
     if (this.options.image) {
       const that = this;
-      image = svgElement.image(this.options.image).loaded(function(this: SVG.Image) {
+      image = svgElement.image(this.options.image).loaded(function(this: SVG_.Image) {
         let c: any;
         if (that.options.rounded) {
           c = svgElement.circle(size - 4);
@@ -264,7 +265,7 @@ export class Avatar {
 
       //UploadIcon
       const that = this;
-      uploadIcon = svgElement.image("../assets/images/camera.svg").loaded(function(this: SVG.Image) {
+      uploadIcon = svgElement.image("../assets/images/camera.svg").loaded(function(this: SVG_.Image) {
           let c: any;
           if (that.options.rounded) {
             c = svgElement.circle(size - 4);
