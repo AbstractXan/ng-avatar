@@ -28,6 +28,7 @@ class Avatar {
     this.el = Avatar.getElement(_el);
     this.options = Avatar.getOptions(arg1, arg2);
     this.render();
+    console.log('NEW AVATARRRRR!');
   }
 
   static isDark(color: string) {
@@ -263,7 +264,7 @@ class Avatar {
 
       //UploadIcon
       const that = this;
-      uploadIcon = svgElement.image("../assets/images/camera.png").loaded(function(this: SVG.Image) {
+      uploadIcon = svgElement.image("../assets/images/camera.svg").loaded(function(this: SVG.Image) {
           let c: any;
           if (that.options.rounded) {
             c = svgElement.circle(size - 4);
@@ -309,6 +310,7 @@ class Avatar {
   }
 
 
+  //Print Initials
   private getSlug() {
     //Return nothing if DNE
     if(!this.options.name){
@@ -319,7 +321,7 @@ class Avatar {
       const nameInitials = this.options.name.match(/\b(\w)/g);
       if (nameInitials) {
         
-        const nameChars = nameInitials.slice(0, 3).join('');
+        const nameChars = nameInitials.slice(0, this.options.characters+1).join('');
         initials = nameChars.toUpperCase();
 
       } else {
@@ -331,6 +333,7 @@ class Avatar {
     }
   }
 
+  //BgColor
   private getBgColor(){
     if(this.options.randomColor){
      return palette[Math.floor(Math.random() * palette.length)];
@@ -340,14 +343,16 @@ class Avatar {
     }
   }
 
+  //Get Size Of Avatar Element
   private getSize(){
-    if (!this.options.size) {
-      return Size['md'];
-    }else if(typeof this.options.size === 'number'){
+    if(typeof this.options.size === 'number'){
       return this.options.size; 
-    }else{
+    }else if(typeof Size[(this.options.size)]== 'number'){
       return Size[(this.options.size)];
+    }else{
+      return Size['md'];
     }
+    
   }
   
 }

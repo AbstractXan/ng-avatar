@@ -34,22 +34,13 @@ export class AppComponent implements OnInit{
   }
   
   toggleRounded(){
-    // if(this.rounded==true){
-    //   this.rounded=false
-    // }
-    // else{
-    //   this.rounded=true;
-    // }
-    this.rounded = !this.rounded;
+    var newRounded = !this.rounded;
+    this.rounded= newRounded;
   }
 
   toggleRandomColor(){
-    if(this.randomColor==true){
-      this.randomColor=false
-    }
-    else{
-      this.randomColor=true;
-    }
+    var newRandomColor = !this.randomColor;
+    this.randomColor = newRandomColor;
   }
 
   toggleActive(){
