@@ -16,13 +16,9 @@
       "es2017",
       "dom"
     ],
-    "paths": {
-      "ng-avatar": [
-        "dist/ng-avatar"
-      ],
-      "ng-avatar/*": [
-        "dist/ng-avatar/*"
-      ]
-    }
-  }
+    
+  "paths": {
+    "avatar": ["dist/avatar"],
+  },
+}
 }
