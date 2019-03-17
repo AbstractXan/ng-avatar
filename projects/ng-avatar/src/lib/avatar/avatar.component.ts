@@ -319,18 +319,18 @@ export class Avatar {
     }
     var initials;
     if (this.options.name && this.options.name.length) {
+
       const nameInitials = this.options.name.match(/\b(\w)/g);
+
       if (nameInitials) {
-        
         const nameChars = nameInitials.slice(0, this.options.characters+1).join('');
         initials = nameChars.toUpperCase();
-
       } else {
         initials = this.options.name[0];
       }
 
       //Return the set no. of characters
-      return initials.slice(0,this.options.characters)
+      return initials.slice(0,this.options.characters);
     }
   }
 
@@ -348,7 +348,7 @@ export class Avatar {
   private getSize(){
     if(typeof this.options.size === 'number'){
       return this.options.size; 
-    }else if(typeof Size[(this.options.size)]== 'number'){
+    }else if(typeof Size[(this.options.size)]=== 'number'){
       return Size[(this.options.size)];
     }else{
       return Size['md'];

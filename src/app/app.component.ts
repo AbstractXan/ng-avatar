@@ -30,10 +30,15 @@ export class AppComponent implements OnInit{
   }
   
   ngOnInit(){
+    this.name="Priyansh Sangule";
+    this.characters = 2;
     this.image = "../assets/images/man.png";
+    this.size = "xl";
+    this.label = "admin";
+    this.rounded = false;
   }
   
-  toggleRounded(){
+  toggleRounded() {
     this.rounded = !this.rounded;
   }
 
@@ -50,6 +55,6 @@ export class AppComponent implements OnInit{
   }
 
   uploadCalled(temp: any){
-    console.log('UPload Called.')
+    console.log('Upload called.')
   }
 }

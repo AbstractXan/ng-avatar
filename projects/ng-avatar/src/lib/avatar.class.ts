@@ -86,9 +86,9 @@ export class DefaultAvatarOptions implements IAvatarOptions {
     this.randomColor = false;
     this.bgColor = this.randomColor ? palette[Math.floor(Math.random() * palette.length)] : defaultColor;
     this.textColor = '#fff';
-    this.size = Size['md'];
+    this.size = Size['xl'];
     this.fontSize = this.size * 0.4;
-    this.rounded = true;
+    this.rounded = false;
     this.radius = 0;
     this.margin = 0;
     this.label = '';

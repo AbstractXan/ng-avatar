@@ -9,7 +9,7 @@ export class AvatarService {
   Avatarconfig = new DefaultAvatarOptions;
   constructor( @Inject(CONFIG) config: IAvatarOptions){
     if (config) {
-      this.Avatarconfig = {...this.Avatarconfig,...config};
+      this.Avatarconfig = {...this.Avatarconfig, ...config};
     }
   }
 
