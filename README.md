@@ -1,4 +1,12 @@
-# Avatar
+# ng-Avatar
+
+![examples1](./examples/1.JPG)
+![examples2](./examples/2.JPG)
+![examples3](./examples/3.JPG)
+![examples4](./examples/4.JPG)
+
+
+## Avatar
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
