@@ -1,8 +1,4 @@
 # ng-Avatar
-
-![examples1](./examples/1.JPG)
-![examples2](./examples/2.JPG)
-![examples3](./examples/3.JPG)
 ![examples4](./examples/4.JPG)
 
 
