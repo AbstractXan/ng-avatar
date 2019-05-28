@@ -1,4 +1,6 @@
-# ng-Avatar
+# ng-Avatar: 
+
+## Demo here: https://mystifying-goldstine-0b0658.netlify.com/
 ![examples4](./examples/4.JPG)
 
 
