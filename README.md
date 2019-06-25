@@ -1,6 +1,9 @@
+
 # ng-Avatar: 
 
-## Demo here: https://mystifying-goldstine-0b0658.netlify.com/
+[![Netlify Status](https://api.netlify.com/api/v1/badges/66d9ec4a-b1a4-41fc-be0e-e83d566cebbf/deploy-status)](https://app.netlify.com/sites/angular-avatar/deploys)
+
+## Demo here: https://angular-avatar.netlify.com/
 ![examples4](./examples/4.JPG)
 
 
