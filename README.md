@@ -1,5 +1,5 @@
 
-# ng-Avatar: 
+# ng-Avatar
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/66d9ec4a-b1a4-41fc-be0e-e83d566cebbf/deploy-status)](https://app.netlify.com/sites/angular-avatar/deploys)
 
